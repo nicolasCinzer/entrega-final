@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="IE=edge"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link
+      rel="stylesheet"
+      href="style.css"
+    />
+    <title>Subastian</title>
+  </head>
+  <body>
+    <h1>Subastian</h1>
+    <div id="boxCTAs">
+      <button id="addAuctionBtn">Agregar Subasta</button>
+      <div>
+        <input
+          id="inputAuction"
+          type="text"
+          placeholder="Ingrese una subasta"
+        /><button id="searchAuctionBtn">Buscar</button>
+      </div>
+    </div>
+    <div id="listOfAuctions"></div>
+    <div id="auctionDetails">details</div>
+    <div id="addAuction">
+      <div>
+        <div>Nombre del item</div>
+        <input type="text" id="itemName"/>
+      </div>
+      <div>
+        <div>Oferta Inicial</div>
+        <input type="number" id="initialBid"/>
+      </div>
+      <div>
+        <div>Postor</div>
+        <input type="text" id="bidderName"/>
+      </div>
+      <button id="publishAuction">Publicar</button>
+      <button id="cancelAuction">Cancelar</button>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>

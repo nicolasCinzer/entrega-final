@@ -1,0 +1,67 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+h1 {
+  margin-left: 12px;
+}
+
+#boxCTAs {
+  padding: 12px 12px;
+  border-top: 2px solid;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+#listOfAuctions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  border-top: 2px solid;
+  padding: 12px;
+}
+
+.auction {
+  display: grid;
+  grid-template-areas:
+    'price price bid'
+    'name name name'
+    'bidder bidder bidder'
+    'initialPrice initialPrice initialPrice'
+    'online online online';
+  gap: 8px;
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.itemName {
+  grid-area: name;
+}
+
+.lastPrice {
+  grid-area: price;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
+
+.lastAuctioneer {
+  grid-area: bidder;
+}
+
+.initialPrice {
+  grid-area: initialPrice;
+}
+
+.amountAuctioneer {
+  grid-area: online;
+}
+
+.bidButton {
+  grid-area: bid;
+  padding: 4px;
+}
