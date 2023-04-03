@@ -1,9 +1,6 @@
 import loginEvents from './login.js';
 import { auctions, buildAuction, addAuctionPanelEvents } from './auctions.js';
-import { setUser, logout } from './logged.js';
-
-const loginPage = document.getElementById('loginPage');
-const homePage = document.getElementById('homePage');
+import { logout } from './logged.js';
 
 const logoutBtn = document.getElementById('logout');
 
