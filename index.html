@@ -17,36 +17,118 @@
     <title>Subastian</title>
   </head>
   <body>
-    <h1>Subastian</h1>
-    <div id="boxCTAs">
-      <button id="addAuctionBtn">Agregar Subasta</button>
-      <div>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage">
+      <div id="loginPane">
         <input
-          id="inputAuction"
           type="text"
-          placeholder="Ingrese una subasta"
-        /><button id="searchAuctionBtn">Buscar</button>
+          placeholder="Usuario"
+          id="accountName"
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          id="accountPw"
+        />
+        <button id="loginBtn">Iniciar Sesion</button>
+        <div id="errorMsg"></div>
       </div>
-    </div>
-    <div id="listOfAuctions"></div>
-    <div id="auctionDetails">details</div>
-    <div id="addAuction">
-      <div>
-        <div>Nombre del item</div>
-        <input type="text" id="itemName"/>
-      </div>
-      <div>
-        <div>Oferta Inicial</div>
-        <input type="number" id="initialBid"/>
-      </div>
-      <div>
-        <div>Postor</div>
-        <input type="text" id="bidderName"/>
-      </div>
-      <button id="publishAuction">Publicar</button>
-      <button id="cancelAuction">Cancelar</button>
     </div>
 
-    <script src="index.js"></script>
+    <!-- HOME PAGE -->
+    <div id="homePage">
+      <!-- HOME -->
+      <nav>
+        <h1>Subastian</h1>
+        <div id="userCTAs">
+          <div id="userLogged"></div>
+          <button id="logout">Cerrar Sesion</button>
+        </div>
+      </nav>
+      <div id="boxCTAs">
+        <button
+          class="btn"
+          id="addAuctionPanelBtn"
+        >
+          Agregar Subasta
+        </button>
+        <div>
+          <input
+            id="inputAuction"
+            type="text"
+            placeholder="Ingrese una subasta"
+          /><button
+            class="btn"
+            id="searchAuctionBtn"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
+      <div id="listOfAuctions"></div>
+
+      <!-- DETAILS -->
+      <div id="offerAuctionPanel">
+        <div id="bidContainer">
+          <div id="bidLabel">Oferta</div>
+          <input
+            type="number"
+            id="bid"
+            class="btn"
+          />
+        </div>
+        <button
+          class="btn"
+          id="offerAuction"
+        >
+          Ofertar
+        </button>
+        <button
+          class="btn"
+          id="cancelOfferAuction"
+        >
+          Cancelar
+        </button>
+        <div id="errorMsgOffer"></div>
+      </div>
+
+      <!-- ADD AUCTION -->
+      <div id="addAuctionPanel">
+        <div id="itemNameContainer">
+          <div id="itemNameLabel">Nombre del item</div>
+          <input
+            type="text"
+            id="itemName"
+            class="btn"
+          />
+        </div>
+        <div id="initialBidContainer">
+          <div id="initialBidLabel">Oferta Inicial</div>
+          <input
+            type="number"
+            id="initialBid"
+            class="btn"
+          />
+        </div>
+        <button
+          class="btn"
+          id="publishAuction"
+        >
+          Publicar
+        </button>
+        <button
+          class="btn"
+          id="canceladdAuctionPanel"
+        >
+          Cancelar
+        </button>
+        <div id="errorMsgAdd"></div>
+      </div>
+    </div>
+
+    <script
+      src="js/index.js"
+      type="module"
+    ></script>
   </body>
 </html>

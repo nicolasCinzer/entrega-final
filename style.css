@@ -1,10 +1,124 @@
+/* Generals */
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap');
+
+:root {
+  --primary-bg: #212121;
+  --second-bg: #282828;
+  --primary-btn-bord: #353535;
+  --second-btn-bord: #0000003b;
+  --core-color: #800080d1;
+  --core-bord: #505;
+  --buttons-hover: #313030e6;
+  --text-color: #d7d7d7;
+  --font: 'Barlow', monospace;
+}
+
 body {
   padding: 0;
   margin: 0;
+  font-family: var(--font);
+  background: var(--primary-bg);
+}
+
+/* Login */
+#loginPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#loginPane {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#loginPane > input {
+  padding: 8px 16px;
+  font-size: 18px;
+  border: 2px solid var(--core-bord);
+  border-radius: 8px;
+  color: var(--text-color);
+  background-color: var(--core-color);
+  font-family: var(--font);
+}
+
+#loginPane > input::placeholder {
+  color: var(--primary-bg);
+  font-family: var(--font);
+}
+
+#loginPane > button {
+  padding: 8px;
+  font-size: 18px;
+  font-family: var(--font);
+  border: 2px solid var(--core-bord);
+  background-color: var(--core-bord);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#loginPane > button:hover {
+  background: var(--core-color);
+  color: var(--text-color);
+}
+
+#errorMsg {
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+}
+
+/* Home */
+#homePage {
+  display: none;
+  color: var(--second-bg);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 h1 {
   margin-left: 12px;
+  color: var(--text-color);
+}
+
+#userCTAs {
+  display: flex;
+  gap: 16px;
+  margin-right: 16px;
+}
+
+#userLogged {
+  background-color: var(--second-bg);
+  border: 1px solid var(--second-btn-bord);
+  border-radius: 8px;
+  height: fit-content;
+  padding: 8px;
+  color: var(--text-color);
+  cursor: default;
+}
+
+#logout {
+  background-color: var(--second-bg);
+  border: 1px solid var(--second-btn-bord);
+  border-radius: 8px;
+  height: fit-content;
+  padding: 8px;
+  font-size: 16px;
+  color: var(--text-color);
+  font-family: var(--font);
+  cursor: pointer;
+}
+
+#logout:hover {
+  background-color: var(--buttons-hover);
 }
 
 #boxCTAs {
@@ -17,14 +131,31 @@ h1 {
 
 #listOfAuctions {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 12px;
   border-top: 2px solid;
   padding: 12px;
 }
 
+.btn {
+  padding: 4px 12px;
+  border: 2px solid var(--core-bord);
+  border-radius: 8px;
+  background-color: var(--core-color);
+  font-family: var(--font);
+  font-size: 16px;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--core-bord);
+  color: var(--text-color);
+}
+
 .auction {
   display: grid;
+  color: var(--text-color);
   grid-template-areas:
     'price price bid'
     'name name name'
@@ -32,13 +163,14 @@ h1 {
     'initialPrice initialPrice initialPrice'
     'online online online';
   gap: 8px;
-  border: 2px solid;
+  border: 2px solid var(--second-btn-bord);
+  background-color: var(--second-bg);
   border-radius: 12px;
   padding: 12px;
 }
 
-.itemName {
-  grid-area: name;
+.auction:hover {
+  border: 2px solid var(--primary-btn-bord);
 }
 
 .lastPrice {
@@ -49,7 +181,13 @@ h1 {
   font-size: 22px;
 }
 
-.lastAuctioneer {
+.itemName {
+  grid-area: name;
+  border-top: 1px solid var(--second-btn-bord);
+  padding-top: 8px;
+}
+
+.lastBidder {
   grid-area: bidder;
 }
 
@@ -57,11 +195,105 @@ h1 {
   grid-area: initialPrice;
 }
 
-.amountAuctioneer {
+.amountBidders {
   grid-area: online;
 }
 
 .bidButton {
   grid-area: bid;
-  padding: 4px;
+}
+
+#inputAuction {
+  padding: 4px 12px;
+  font-size: 16px;
+  border: 2px solid var(--core-bord);
+  border-radius: 8px;
+  color: var(--text-color);
+  background-color: var(--core-color);
+  font-family: var(--font);
+  font-weight: bold;
+  margin-right: 6px;
+}
+
+#inputAuction::placeholder {
+  color: var(--primary-bg);
+}
+
+/* Add Auction */
+#addAuctionPanel {
+  display: none;
+  justify-content: center;
+  color: var(--text-color);
+  grid-template-areas: 'item item item item' 'offer offer publish cancel' 'error error error error';
+  gap: 12px;
+}
+
+#itemNameContainer {
+  grid-area: item;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#itemName {
+  width: 100%;
+}
+
+#initialBidContainer {
+  grid-area: offer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#publishAuction {
+  grid-area: publish;
+}
+
+#canceladdAuctionPanel {
+  grid-area: cancel;
+}
+
+#errorMsgAdd {
+  grid-area: error;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Offer Auction */
+#offerAuctionPanel {
+  display: grid;
+  grid-template-areas: 'bid bid' 'offer cancel' 'error error';
+  justify-content: center;
+  color: var(--text-color);
+  gap: 12px;
+}
+
+#bidContainer {
+  grid-area: bid;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 315px;
+}
+
+#bid::placeholder {
+  color: var(--primary-bg);
+  font-weight: bold;
+}
+
+#offerAuction {
+  grid-area: offer;
+}
+
+#cancelOfferAuction {
+  grid-area: cancel;
+}
+
+#errorMsgOffer {
+  grid-area: error;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
