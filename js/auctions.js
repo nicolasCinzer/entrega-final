@@ -1,44 +1,11 @@
 import { buildAuctionsHandler } from './index.js';
-
-export const auctions = [
-  {
-    item: 'Rodney Mullen Skate',
-    lastPrice: 4000,
-    lastBidder: 'Pepe Morales',
-    initialPrice: 100,
-    amountBidders: 4,
-    id: 1,
-  },
-  {
-    item: 'Cristiano Ronaldo Gucci Jacket',
-    lastPrice: 45000,
-    lastBidder: 'Juan Cruz Palo',
-    initialPrice: 1800,
-    amountBidders: 10,
-    id: 2,
-  },
-  {
-    item: 'Di Caprio Lamborghini',
-    lastPrice: 499999,
-    lastBidder: 'Aitor Tilla',
-    initialPrice: 200000,
-    amountBidders: 98,
-    id: 3,
-  },
-  {
-    item: 'Old Statue from Paris',
-    lastPrice: 500,
-    lastBidder: 'Juan Pedro Rivera',
-    initialPrice: 140,
-    amountBidders: 190,
-    id: 4,
-  },
-];
+import { addBid, updateBid } from './apiCalls.js';
 
 export const buildAuction = (auction, listOfAuctions) => {
   let auctionNode = document.createElement('div');
   auctionNode.id = auction.id;
   auctionNode.className = 'auction';
+  auctionNode.auction = auction;
   let itemNameNode = document.createElement('div');
   itemNameNode.className = 'itemName';
   let lastPriceNode = document.createElement('div');
@@ -79,46 +46,14 @@ const errorMsgAdd = document.getElementById('errorMsgAdd');
 
 export const addAuctionPanelEvents = () => {
   addAuctionPanel.style.display = 'grid';
+  offerAuctionPanel.style.display = 'none';
 
-  itemName.onchange = evt => {
-    let value = evt.target.value;
-
-    if (!value) {
-      itemNameLabel.style.color = 'red';
-      return;
-    }
-
-    itemNameLabel.style.color = '';
-  };
-
-  initialBid.onchange = evt => {
-    let value = evt.target.value;
-
-    if (!value) {
-      initialBidLabel.style.color = 'red';
-      return;
-    }
-
-    initialBidLabel.style.color = '';
-  };
-
-  publishAuction.onmouseover = () => {
-    if (!validateForm()) {
-      publishAuction.style.background = 'var(--core-bord)';
-    }
-  };
-
-  publishAuction.onmouseout = () => {
-    publishAuction.style.background = '';
-  };
-
-  publishAuction.onclick = () => {
+  publishAuction.onclick = async () => {
     if (!validateForm()) {
       return;
     }
 
     const currentUser = localStorage.getItem('user');
-    const currentsAuctions = JSON.parse(localStorage.getItem('currentsAuctions'));
 
     let auction = {
       item: itemName.value,
@@ -126,21 +61,16 @@ export const addAuctionPanelEvents = () => {
       lastBidder: currentUser,
       initialPrice: initialBid.value,
       amountBidders: 1,
-      id:
-        currentsAuctions.sort((x, y) => {
-          if (x.id > y.id) {
-            return -1;
-          }
-          if (x.id < y.id) {
-            return 1;
-          }
-          return 0;
-        })[0].id + 1,
     };
 
-    currentsAuctions.push(auction);
+    await addBid(auction);
 
-    localStorage.setItem('currentsAuctions', JSON.stringify(currentsAuctions));
+    Toastify({
+      text: 'Felicitaciones! A añadido una nueva subasta!',
+      duration: 3000,
+      gravity: 'bottom',
+      position: 'right',
+    }).showToast();
 
     buildAuctionsHandler();
 
@@ -153,21 +83,49 @@ export const addAuctionPanelEvents = () => {
     itemName.value = '';
     initialBid.value = '';
     addAuctionPanel.style.display = 'none';
+
+    Toastify({
+      text: 'La subasta fue cancelada.',
+      duration: 3000,
+      gravity: 'bottom',
+      position: 'right',
+      style: {
+        background: 'red',
+      },
+    }).showToast();
   };
 
   const validateForm = () => {
     let isValid = true;
-    const currentsAuctions = JSON.parse(localStorage.getItem('currentsAuctions'));
 
-    if (!itemName.value || currentsAuctions.some(auction => auction.item === itemName.value)) {
+    if (!itemName.value) {
       isValid = false;
       itemNameLabel.style.color = 'red';
-      errorMsgAdd.innerHTML = 'Debe ingresar un item que no exista!'
+
+      Toastify({
+        text: 'Debe ingresar un nombre para el item a subastar.',
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'right',
+        style: {
+          background: 'red',
+        },
+      }).showToast();
     }
 
     if (!initialBid.value) {
       isValid = false;
       initialBidLabel.style.color = 'red';
+
+      Toastify({
+        text: 'Debe ingresar una oferta.',
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'right',
+        style: {
+          background: 'red',
+        },
+      }).showToast();
     }
 
     isValid ? (errorMsgAdd.innerHTML = '') : null;
@@ -184,58 +142,41 @@ const canceOfferlAuction = document.getElementById('cancelOfferAuction');
 const errorMsgOffer = document.getElementById('errorMsgOffer');
 
 const bid = evt => {
-  const auctionId = parseInt(evt.target.parentElement.id);
-  const lastPrice = parseInt(evt.target.parentElement.childNodes[1].innerHTML.replace('$', ''));
+  const auctionId = parseInt(evt.target.parentElement.auction.id);
+  const lastPrice = parseInt(evt.target.parentElement.auction.lastPrice);
+  const initialBid = parseInt(evt.target.parentElement.auction.initialPrice);
+  const amountBidders = parseInt(evt.target.parentElement.auction.amountBidders);
+  const item = evt.target.parentElement.auction.item;
+  const lastBidder = evt.target.parentElement.auction.lastBidder;
 
   bidNode.setAttribute('placeholder', lastPrice);
 
   offerAuctionPanel.style.display = 'grid';
+  addAuctionPanel.style.display = 'none';
 
-  bidNode.onchange = evt => {
-    let value = evt.target.value;
-
-    if (!value) {
-      bidLabel.style.color = 'red';
-      return;
-    }
-
-    bidLabel.style.color = '';
-  };
-
-  offerAuction.onmouseover = () => {
-    if (!validateForm()) {
-      offerAuction.style.background = 'var(--core-bord)';
-    }
-  };
-
-  offerAuction.onmouseout = () => {
-    offerAuction.style.background = '';
-  };
-
-  offerAuction.onclick = () => {
+  offerAuction.onclick = async () => {
     if (!validateForm()) {
       return;
     }
 
     const currentUser = localStorage.getItem('user');
-    const currentsAuctions = JSON.parse(localStorage.getItem('currentsAuctions'));
 
-    let auctions = currentsAuctions.map(auction => {
-      if (auction.id !== auctionId) {
-        return auction;
-      }
+    let auction = {
+      item: item,
+      lastPrice: parseInt(bidNode.value),
+      lastBidder: currentUser,
+      amountBidders: amountBidders + 1,
+      initialPrice: initialBid,
+    };
 
-      return {
-        item: auction.item,
-        lastPrice: parseInt(bidNode.value),
-        lastBidder: currentUser,
-        initialPrice: auction.initialPrice,
-        amountBidders: auction.amountBidders + 1,
-        id: auction.id,
-      };
-    });
+    await updateBid(auctionId, auction);
 
-    localStorage.setItem('currentsAuctions', JSON.stringify(auctions));
+    Toastify({
+      text: `Felicitaciones! A ofertado a la subasta de ${lastBidder}!`,
+      duration: 3000,
+      gravity: 'bottom',
+      position: 'right',
+    }).showToast();
 
     buildAuctionsHandler();
 
@@ -246,6 +187,16 @@ const bid = evt => {
   canceOfferlAuction.onclick = () => {
     bidNode.value = '';
     offerAuctionPanel.style.display = 'none';
+
+    Toastify({
+      text: 'La oferta fue cancelada.',
+      duration: 3000,
+      gravity: 'bottom',
+      position: 'right',
+      style: {
+        background: 'red',
+      },
+    }).showToast();
   };
 
   const validateForm = () => {
@@ -254,12 +205,31 @@ const bid = evt => {
     if (!bidNode.value) {
       isValid = false;
       bidLabel.style.color = 'red';
+
+      Toastify({
+        text: 'Debe ingresar una oferta.',
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'right',
+        style: {
+          background: 'red',
+        },
+      }).showToast();
     }
 
     if (bidNode.value < lastPrice) {
       isValid = false;
       bidLabel.style.color = 'red';
-      errorMsgOffer.innerHTML = `Debe ingresar un valor por encima de ${lastPrice}$!`;
+
+      Toastify({
+        text: `Debe ingresar un valor por encima de ${lastPrice}$!`,
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'right',
+        style: {
+          background: 'red',
+        },
+      }).showToast();
     }
 
     isValid ? (errorMsgOffer.innerHTML = '') : null;

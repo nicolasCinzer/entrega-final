@@ -33,7 +33,6 @@ const clickLoginBtn = () => {
     const userLogged = localStorage.getItem('user');
 
     if (inputName.value !== userLogged) {
-      localStorage.removeItem('currentsAuctions');
       localStorage.setItem('user', inputName.value);
     }
 

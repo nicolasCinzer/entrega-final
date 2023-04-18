@@ -1,5 +1,4 @@
 const userLogged = document.getElementById('userLogged');
-const listOfAuctions = document.getElementById('listOfAuctions');
 
 export const setUser = () => {
   let user = localStorage.getItem('user');

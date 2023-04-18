@@ -1,6 +1,7 @@
 import loginEvents from './login.js';
-import { auctions, buildAuction, addAuctionPanelEvents } from './auctions.js';
+import { buildAuction, addAuctionPanelEvents } from './auctions.js';
 import { logout } from './logged.js';
+import { getBids } from './apiCalls.js';
 
 const logoutBtn = document.getElementById('logout');
 
@@ -49,16 +50,11 @@ const main = () => {
   };
 };
 
-export const buildAuctionsHandler = () => {
+export const buildAuctionsHandler = async () => {
   listOfAuctions.innerHTML = '';
 
   /* Get currents auctions */
-  let currentsAuctions = JSON.parse(localStorage.getItem('currentsAuctions'));
-
-  if (!currentsAuctions) {
-    localStorage.setItem('currentsAuctions', JSON.stringify(auctions));
-    currentsAuctions = auctions;
-  }
+  let currentsAuctions = await getBids();
 
   /* Build currents auctions */
   for (let auction of currentsAuctions) {
